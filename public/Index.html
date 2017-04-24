@@ -1,0 +1,23 @@
+<!doctype html>
+<html ng-app="mainApp">
+<head>
+    <style>
+        #back {
+            background: black;
+        }
+
+    </style>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controllers/user.controller.js"></script>
+    <script src="js/services/user.service.js"></script>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/user.css">
+
+</head>
+<body id="back">
+<h1>GESTIÓN DE USUARIOS</h1>
+<div ng-view></div>
+</body>
+</html>

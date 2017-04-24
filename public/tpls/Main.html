@@ -1,0 +1,78 @@
+<!doctype html>
+<body>
+<div ng-controller="userCtrl">
+
+   <table id="searchTextResults">
+
+        <tr ng-repeat="user in users | filter:search">
+
+            <td>{{user.name}}</td>
+            <td>{{user.address}}</td>
+            <td>{{user.phone}}</td>
+            <td>{{user.studies}}</td>
+        </tr>
+    </table>
+
+
+    <form ng-submit="userAdd()">
+        <input type="text" ng-model="userName" size="30"
+               placeholder="Add user name">
+        <input type="text" ng-model="userStudy" size="30"
+               placeholder="Add user study">
+        <input type="text" ng-model="userPhoneName" size="30"
+               placeholder="Add user phone name">
+        <input type="text" ng-model="userPhone" size="30"
+               placeholder="Add user phone">
+        <input type="text" ng-model="userAddress" size="30"
+               placeholder="Add user address">
+        <input type="text" ng-model="search.name" size="30"
+               placeholder="Search user name">
+        <input class ="button" type="submit" value="Add user">
+    </form>
+    <form ng-submit="filterDB()">
+    <input type="text" ng-model="filterdb" size="30"
+           placeholder="Search in database user name">
+        <input class ="button" type="submit" value="Search in database user name">
+    </form>
+
+    <form ng-submit="filterSDB()">
+        <input type="text" ng-model="filtersdb" size="30"
+               placeholder="Search in database user studies">
+        <input class ="button" type="submit" value="Search in database user studies">
+    </form>
+
+    <form ng-submit="addsubject()">
+        <input type="text" ng-model="subjectname" size="30" placeholder="Name of the subject">
+        <input class ="button" type="submit" value="Add subject to database">
+    </form>
+
+    <form ng-submit="updatesub()">
+        <input type="text" ng-model="userName2" size="30" placeholder="Name of the user">
+        <select ng-model="subjectName" >
+            <option ng-repeat="subject in subjectsdb">{{subject.name}}
+            </option>
+        </select>
+        <input class ="button" type="submit" value="Add user to subject">
+    </form>
+
+    <table id="Details">
+        <tr ng-repeat="sub in subjects | filter:search">
+
+                <td>{{sub.name}}</td>
+                <td>{{sub.address}}</td>
+                <td>{{sub.phone}}</td>
+                <td>{{sub.studies}}</td>
+                <td>{{sub.subjects}}</td>
+
+
+        </tr>
+    </table>
+
+    <button class ="button" ng-click="showList()">Show All User List ( alphabetic order)</button>
+    <form ng-submit="detailofuser()">
+        <input type="text" ng-model="username" size="30" placeholder="Name of the user ">
+        <input class ="button" type="submit" value="See user details">
+    </form>
+</div>
+</body>
+</html>
