@@ -1,6 +1,8 @@
 var express = require('express'),
     bodyParser = require('body-parser');
 var app = express();
+var cors = require('cors');
+app.use(cors());
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var users = new Schema({
@@ -132,20 +134,75 @@ app.get('/allsubjects', function (req,res) {
         res.send(subjects);
     });
 });
+app.post('/getonestudy', function(req, res) {
+    var us=[];
+    Usuario.find({}, function(err, users) {
+        var i = 0;
+        for (; i < users.length; i++) {
+
+            for (var j = 0; j < users[i].studies.length; j++) {
+                if (users[i].studies[j] == req.body.name) {
+                    us.push({name: users[i].name});
+                }
+            }
+        }
+        console.log(us);
+        res.send(us);
+    });
+
+
+});
+app.post('/getonesub', function(req, res) {
+    var students=[];
+    Subject.find({name:req.body.name}, function(err, subjects) {
+
+        if(subjects[0]!=undefined){
+            Usuario.populate(subjects, {path: "users"},function(err, subjects) {
+
+                var i = 0;
+                for (; i < subjects[0].users.length; i++) {
+                    students.push({name: subjects[0].users[i].name, phone: subjects[0].users[i].phone, studies: subjects[0].users[i].studies,address:subjects[0].users[i].address,  done: false})
+                }
+                students.sort(function (a, b) {
+                    var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
+                    if (nameA < nameB) //sort string ascending
+                        return -1;
+                    if (nameA > nameB)
+                        return 1;
+                    return 0;//default return value (no sorting)
+                });
+                res.send(students);
+            });
+        }else {
+            res.send(students);
+        }
+
+    });
+});
+
+app.post('/getdetailsub', function(req, res) {
+    Subject.find({name:req.body.name}, function(err, subjects) {
+        var subjects2=[];
+        if(subjects[0]!=undefined){
+
+            for (var i = 0; i < subjects.length; i++) {
+                subjects2.push({name:subjects[i].name,slength:subjects[i].users.length});
+            }
+            subjects2.sort(function(a, b){
+                return b.slength-a.slength
+            });
+            res.send(subjects2);
+        }
+        else {
+            res.send(subjects2);
+        }
+    });
+});
+
 app.get('/filterdb/:letter', function (req, res) {
     var users=[];
     var letter=req.params.letter;
     Usuario.find({"name":{"$regex": letter} },function (err, usuarios) {
-        for (var i = 0; i < usuarios.length; i++) {
-            users.push({name: usuarios[i].name, studies:usuarios[i].studies,phone:usuarios[i].phone,address:usuarios[i].address});
-        }
-        res.send(users);
-    });
-});
-app.get('/filtersdb/:letter', function (req, res) {
-    var users=[];
-    var letter=req.params.letter;
-    Usuario.find({"studies":{"$regex": letter} },function (err, usuarios) {
         for (var i = 0; i < usuarios.length; i++) {
             users.push({name: usuarios[i].name, studies:usuarios[i].studies,phone:usuarios[i].phone,address:usuarios[i].address});
         }
